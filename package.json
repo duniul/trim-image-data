@@ -17,8 +17,8 @@
     "image-data",
     "image-editing",
     "canvas",
-    "crop",
-    "trim"
+    "crop-image",
+    "trim-image"
   ],
   "main": "lib/cjs/index.js",
   "modules": "lib/es/index.js",
