@@ -62,5 +62,5 @@ A lot of the code in this repo is based on [trim-canvas], I just had a need for 
 functionality without passing a canvas.
 
 [trim-canvas]: https://github.com/agilgur5/trim-canvas
-[image-data]: (https://developer.mozilla.org/en-US/docs/Web/API/ImageData)
-[crop-image-data]: (https://github.com/duniul/crop-image-data)
+[image-data]: https://developer.mozilla.org/en-US/docs/Web/API/ImageData
+[crop-image-data]: https://github.com/duniul/crop-image-data
