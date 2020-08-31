@@ -1,5 +1,8 @@
 # trim-image-data
 
+[![](https://img.shields.io/npm/v/trim-image-data?color=brightgreen)](https://www.npmjs.com/package/trim-image-data)
+[![](https://img.shields.io/bundlephobia/minzip/trim-image-data)](https://bundlephobia.com/result?p=trim-image-data)
+
 💇‍♀️ Function for trimming/cropping transparent pixels surrounding an image. Very similar to
 [trim-canvas], but accepts and returns an [ImageData][image-data]-instance instead. Also allows
 specifying custom colors to trim.
