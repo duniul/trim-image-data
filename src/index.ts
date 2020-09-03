@@ -51,7 +51,10 @@ function scanSide(imageData: ImageDataLike, side: Side, trimColor: TrimColorFunc
   return null;
 }
 
-export default function trimImageData(imageData: ImageDataLike, trimOptions?: TrimOptions) {
+export default function trimImageData(
+  imageData: ImageDataLike,
+  trimOptions?: TrimOptions
+): ImageData {
   const trimColor: TrimColorFunc = trimOptions?.trimColor || (({ alpha }) => !!alpha);
 
   const cropOptions: CropOptions = {};
