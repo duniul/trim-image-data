@@ -1,78 +1,110 @@
 import ImageData from '@canvas/image-data';
 import trimImageData from '.';
+import { getTestImageData } from '../test/testImageData';
 
 global.ImageData = ImageData;
 
-const t = [0, 0, 0, 0]; // transparent
-const w = [0, 0, 0, 255]; // white
-const b = [255, 255, 255, 255]; // black
+function isSameData(dataA: Uint8ClampedArray | number[], dataB: Uint8ClampedArray | number[]) {
+  if (dataA.length !== dataB.length) {
+    return false;
+  }
 
-it('trims transparent pixels by default', () => {
-  // prettier-ignore
-  const dataIn = [
-    t, t, t, t, t, t,
-    t, t, b, b, t, t,
-    t, b, b, b, b, t,
-    t, b, b, b, b, t,
-    t, t, b, b, t, t,
-    t, t, t, t, t, t,
-  ].flat();
+  return dataA.join() === dataB.join();
+}
 
-  // prettier-ignore
-  const expectedDataOut = [
-    t, b, b, t,
-    b, b, b, b,
-    b, b, b, b,
-    t, b, b, t,
-  ].flat();
+describe('test data arrays', () => {
+  const t = [0, 0, 0, 0]; // transparent
+  const w = [0, 0, 0, 255]; // white
+  const b = [255, 255, 255, 255]; // black
 
-  const imageData = new ImageData(Uint8ClampedArray.from(dataIn), 6, 6);
-  const result = trimImageData(imageData);
+  function flat(arr: number[][]) {
+    return arr.reduce((acc, val) => acc.concat(val), []);
+  }
 
-  expect(result.data).toEqual(Uint8ClampedArray.from(expectedDataOut));
-  expect(result.width).toEqual(4);
-  expect(result.height).toEqual(4);
-});
+  it('trims transparent pixels by default', () => {
+    // prettier-ignore
+    const dataIn = flat([
+      t, t, t, t, t, t,
+      t, t, b, b, t, t,
+      t, b, b, b, b, t,
+      t, b, b, b, b, t,
+      t, t, b, b, t, t,
+      t, t, t, t, t, t,
+    ]);
 
-it('trims custom pixels through trimColor function', () => {
-  // prettier-ignore
-  const dataIn = [
-    b, b, b, b, b, b,
-    b, b, w, w, b, b,
-    b, w, w, w, w, b,
-    b, w, w, w, w, b,
-    b, b, w, w, b, b,
-    b, b, b, b, b, b,
-  ].flat();
+    // prettier-ignore
+    const expectedDataOut = flat([
+      t, b, b, t,
+      b, b, b, b,
+      b, b, b, b,
+      t, b, b, t,
+    ]);
 
-  // prettier-ignore
-  const expectedDataOut = [
-    b, w, w, b,
-    w, w, w, w,
-    w, w, w, w,
-    b, w, w, b,
-  ].flat();
+    const imageData = new ImageData(Uint8ClampedArray.from(dataIn), 6, 6);
+    const result = trimImageData(imageData);
 
-  const imageData = new ImageData(Uint8ClampedArray.from(dataIn), 6, 6);
-  const result = trimImageData(imageData, {
-    trimColor: ({ red, green, blue, alpha }) =>
-      red === 0 && green === 0 && blue === 0 && alpha === 255,
+    expect(result.width).toEqual(4);
+    expect(result.height).toEqual(4);
+    expect(isSameData(result.data, expectedDataOut)).toBe(true);
   });
 
-  expect(result.data).toEqual(Uint8ClampedArray.from(expectedDataOut));
-  expect(result.width).toEqual(4);
-  expect(result.height).toEqual(4);
+  it('trims custom pixels through trimColor function', () => {
+    // prettier-ignore
+    const dataIn = flat([
+      b, b, b, b, b, b,
+      b, b, w, w, b, b,
+      b, w, w, w, w, b,
+      b, w, w, w, w, b,
+      b, b, w, w, b, b,
+      b, b, b, b, b, b,
+    ]);
+
+    // prettier-ignore
+    const expectedDataOut = flat([
+      b, w, w, b,
+      w, w, w, w,
+      w, w, w, w,
+      b, w, w, b,
+    ]);
+
+    const imageData = new ImageData(Uint8ClampedArray.from(dataIn), 6, 6);
+    const result = trimImageData(imageData, {
+      trimColor: ({ red, green, blue, alpha }) =>
+        red === 0 && green === 0 && blue === 0 && alpha === 255,
+    });
+
+    expect(result.width).toEqual(4);
+    expect(result.height).toEqual(4);
+    expect(isSameData(result.data, expectedDataOut)).toBe(true);
+  });
+
+  it('does nothing if ImageData is already trimmed', () => {
+    // prettier-ignore
+    const dataIn = flat([
+      t, b, b, t,
+      b, b, b, b,
+      b, b, b, b,
+      t, b, b, t,
+    ]);
+
+    const imageData = new ImageData(Uint8ClampedArray.from(dataIn), 4, 4);
+    const result = trimImageData(imageData);
+    expect(isSameData(result.data, dataIn)).toBe(true);
+  });
 });
 
-it('does nothing if ImageData is already trimmed', () => {
-  // prettier-ignore
-  const dataIn = [
-    t, b, b, t,
-    b, b, b, b,
-    b, b, b, b,
-    t, b, b, t,
-  ].flat();
+describe('test real images', () => {
+  const images = ['mario', 'sans'];
 
-  const imageData = new ImageData(Uint8ClampedArray.from(dataIn), 4, 4);
-  expect(trimImageData(imageData)).toEqual(imageData);
+  it.each(images)('correctly trims image: %p', async key => {
+    const [untrimmedImageData, trimmedImageData] = await Promise.all([
+      getTestImageData(`${key}.png`),
+      getTestImageData(`${key}_trimmed.png`),
+    ]);
+
+    const result = trimImageData(untrimmedImageData);
+    expect(result.width).toEqual(trimmedImageData.width);
+    expect(result.height).toEqual(trimmedImageData.height);
+    expect(isSameData(result.data, trimmedImageData.data)).toBe(true);
+  });
 });
