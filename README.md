@@ -7,6 +7,10 @@
 [trim-canvas], but accepts and returns an [ImageData][image-data]-instance instead. Also allows
 specifying custom colors to trim.
 
+## Demo
+
+https://trim-image-data.netlify.app
+
 ## Installation
 
 | npm                           | yarn                        |

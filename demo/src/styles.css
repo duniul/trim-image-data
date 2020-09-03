@@ -1,0 +1,54 @@
+body {
+  height: 100%;
+  width: 100%;
+  font-family: sans-serif;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+#app {
+  height: 100%;
+  width: 600px;
+}
+
+#canvas-wrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 500px;
+  width: 100%;
+  max-width: 600px;
+  background: #f1f1f1;
+}
+
+
+#canvas {
+  border: 1px solid #d4d4d4;
+  margin: 24px 0;
+  max-height: 500px;
+  max-width: 600px;
+}
+
+.action-bar {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 8px;
+}
+
+.action-bar > #file-input {
+  flex: 1 1 auto;
+}
+
+.action-bar > input {
+  min-width: 60px;
+}
+
+.action-bar > button {
+  flex: 0 1 auto;
+}
+
+.action-bar *:not(:first-child) {
+  margin-left: 8px;
+}
