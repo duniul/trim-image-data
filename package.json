@@ -1,6 +1,6 @@
 {
   "name": "trim-image-data",
-  "version": "1.0.2",
+  "version": "2.0.0",
   "description": "Function for trimming surrounding pixels of an ImageData-instance.",
   "author": "Daniel Grefberg <hello@danielgrefberg.com>",
   "license": "ISC",

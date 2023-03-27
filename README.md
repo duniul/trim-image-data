@@ -11,13 +11,46 @@ specifying custom colors to trim.
 
 https://trim-image-data.netlify.app
 
+## Usage
+
+```js
+import trimImageData from 'trim-image-data';
+
+// trim surrounding fully transparent pixels
+const trimmedTransparent = trimImageData(imageData);
+
+// trim surrounding white pixels
+const trimmedWhite = trimImageData(imageData, {
+  trimColor: ([red, green, blue, alpha]) => {
+    return red === 255 && green === 255 && blue === 255 && alpha === 255;
+  };
+});
+
+// supports passing a RGBA array instead of a callback too
+const trimmedWhite = trimImageData(imageData, {
+  trimColor: [255, 255, 255, 255]
+});
+
+// trim any pixel with max alpha
+const trimmedDim = trimImageData(imageData, {
+  trimColor: ([alpha]) => alpha === 255
+});
+```
+
 ## Installation
 
-| npm                           | yarn                        |
-| ----------------------------- | --------------------------- |
-| `npm install trim-image-data` | `yarn add trim-image-data`  |
+```sh
+# npm
+npm install trim-image-data
 
-## Usage
+# yarn
+yarn add trim-image-data
+
+# pnpm
+pnpm add trim-image-data
+```
+
+## API
 
 ### `trimImageData(imageData, trimOptions)`
 
@@ -29,34 +62,17 @@ not mutate the recieved instance.
 - `imageData` - the ImageData-instance instance to crop
 
 - `cropOptions` - optional, an object specifying the amount of pixels to crop from each side
-  - `trimColor({ red, green, blue, alpha }) => boolean`  
+
+  - `trimColor([red, green, blue, alpha]) => boolean` | `trimColor: [r, g, b, a]`  
     Callback function used to determine if a value should be trimmed or not. Receives an object of
     RGBA channels and should return a boolean.
+
+    Also accepts a single RGBA-array as a shorthand for a callback that returns `true` if all
+    channels are equal to the corresponding channel in the array.
 
 **Return value:**
 
 A new, trimmed ImageData-instance.
-
-**Examples:**
-
-```js
-import trimImageData from 'trim-image-data';
-
-// trim surrounding fully transparent pixels
-const trimmedTransparent = trimImageData(imageData);
-
-// trim surrounding white pixels
-const trimmedWhite = trimImageData(imageData, {
-  trimColor: ({ red, green, blue, alpha }) => {
-    return red === 255 && green === 255 && blue === 255 && alpha === 255;
-  };
-});
-
-// trim any pixel without max alpha
-const trimmedDim = trimImageData(imageData, {
-  trimColor: ({ alpha }) => alpha === 255
-});
-```
 
 ## Related packages
 

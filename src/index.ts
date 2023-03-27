@@ -2,27 +2,35 @@ import cropImageData, { CropOptions, ImageDataLike } from 'crop-image-data';
 
 type ImageDataLikeData = Uint8ClampedArray | number[];
 
-export interface RGBA {
-  red: number;
-  green: number;
-  blue: number;
-  alpha: number;
-}
+export type RGBA = [number, number, number, number];
 
 export type TrimColorFunc = (rgba: RGBA) => boolean;
 
 type Side = 'top' | 'right' | 'bottom' | 'left';
 
 export interface TrimOptions {
-  trimColor: TrimColorFunc;
+  trimColor: TrimColorFunc | RGBA;
 }
 
 function getEmptyImageData() {
   return new ImageData(1, 1);
 }
 
-function getRGBA(data: ImageDataLikeData, i: number): RGBA {
-  return { red: data[i], green: data[i + 1], blue: data[i + 2], alpha: data[i + 3] };
+function getRgba(data: ImageDataLikeData, i: number): RGBA {
+  return [data[i], data[i + 1], data[i + 2], data[i + 3]];
+}
+
+function getTrimColorFunc(option: TrimOptions['trimColor'] | undefined): TrimColorFunc {
+  if (typeof option === 'function') {
+    return option;
+  } else if (Array.isArray(option)) {
+    return ([r, g, b, a]) => {
+      return r === option[0] && g === option[1] && b === option[2] && a === option[3];
+    };
+  }
+
+  // trim transparent pixels by default
+  return rgba => rgba[3] === 0;
 }
 
 function scanSide(imageData: ImageDataLike, side: Side, trimColor: TrimColorFunc) {
@@ -39,8 +47,8 @@ function scanSide(imageData: ImageDataLike, side: Side, trimColor: TrimColorFunc
     // loop through each row
     for (let s = 0; s < secondaryAxis; s++) {
       const index = (horizontal ? width * s + p : width * p + s) * 4;
-      const rgba = getRGBA(data, index);
-      if (trimColor(rgba)) {
+      const rgba = getRgba(data, index);
+      if (!trimColor(rgba)) {
         // return number of columns from edge
         return reverse ? start - p : p;
       }
@@ -55,7 +63,7 @@ export default function trimImageData(
   imageData: ImageDataLike,
   trimOptions?: TrimOptions
 ): ImageData {
-  const trimColor: TrimColorFunc = trimOptions?.trimColor || (({ alpha }) => !!alpha);
+  const trimColor: TrimColorFunc = getTrimColorFunc(trimOptions?.trimColor);
 
   const cropOptions: CropOptions = {};
   const sides: Side[] = ['top', 'bottom', 'left', 'right'];

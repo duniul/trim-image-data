@@ -1,5 +1,5 @@
 import ImageData from '@canvas/image-data';
-import trimImageData from '.';
+import trimImageData, { RGBA } from '.';
 import { getTestImageData } from '../test/testImageData';
 
 global.ImageData = ImageData;
@@ -48,7 +48,14 @@ describe('test data arrays', () => {
     expect(isSameData(result.data, expectedDataOut)).toBe(true);
   });
 
-  it('trims custom pixels through trimColor function', () => {
+  it.each([
+    {
+      label: 'callback',
+      trimColor: ([red, green, blue, alpha]: RGBA) =>
+        red === 255 && green === 255 && blue === 255 && alpha === 255,
+    },
+    { label: 'shorthand', trimColor: [255, 255, 255, 255] as [number, number, number, number] },
+  ])('trims custom pixels through trimColor function ($label)', ({ trimColor }) => {
     // prettier-ignore
     const dataIn = flat([
       b, b, b, b, b, b,
@@ -68,10 +75,7 @@ describe('test data arrays', () => {
     ]);
 
     const imageData = new ImageData(Uint8ClampedArray.from(dataIn), 6, 6);
-    const result = trimImageData(imageData, {
-      trimColor: ({ red, green, blue, alpha }) =>
-        red === 0 && green === 0 && blue === 0 && alpha === 255,
-    });
+    const result = trimImageData(imageData, { trimColor });
 
     expect(result.width).toEqual(4);
     expect(result.height).toEqual(4);

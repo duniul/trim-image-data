@@ -1,6 +1,27 @@
-## [1.0.2](https://github.com/duniul/trim-image-data/compare/v1.0.1...v1.0.2) (2020-09-04)
+## 2.0.0
 
+### Major Changes
+
+- BREAKING CHANGE: `trimColor` now accepts an RGBA array instead of an object.
+
+  - Before: `trimColor: ({ red, blue, green, alpha }) => { ... }`
+  - Now: `trimColor: ([red, blue, green, alpha]) => { ... }`
+
+- BREAKING CHANGE: the response of `trimColor` should now return return true if you _want_ the color
+  to be trimmed, so essentially the opposite of the previous behavior.
+
+### Minor Changes
+
+- `trimColor` now also accepts a single RGBA-array as a shorthand for a callback that returns `true`
+  if all channels are equal to the corresponding value in the array.
+  - Example: `trimColor: [255, 255, 255, 255]` (would trim white pixels)
+
+### Patch Changes
+
+- Fix default behavior of `trimImageData()`.
+
+## 1.0.2
 
 ### Bug Fixes
 
-* only include built files in the package ([ca9d7cc](https://github.com/duniul/trim-image-data/commit/ca9d7cca67c1d614983fe0b495f9945baa706ca0))
+- Only include built files in the package.
