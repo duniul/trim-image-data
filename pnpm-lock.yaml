@@ -6,8 +6,8 @@ settings:
 
 dependencies:
   crop-image-data:
-    specifier: ^1.0.2
-    version: 1.0.2
+    specifier: ^1.0.3
+    version: 1.0.3
 
 devDependencies:
   '@biomejs/biome':
@@ -772,10 +772,10 @@ packages:
     engines: { node: '>=16' }
     dev: true
 
-  /crop-image-data@1.0.2:
+  /crop-image-data@1.0.3:
     resolution:
       {
-        integrity: sha512-GbKNOzrIewHlJ4Lca29jiN02f0vBRMcLrJXOEKHRcUFb/K/hkf5/H8IWfU/BW1EC5dbFt1M7PfNxDkrmmMzikg==,
+        integrity: sha512-hLCbNf05PR5slRrfbqRci8xFgTn5ZXv6EZCoICWim3bt8Su+K869BL1ocMVHYhpdrVwZJc/SZAR06/pdwjLDMQ==,
       }
     dev: false
 
