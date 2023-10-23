@@ -1,8 +1,10 @@
 import ImageData from '@canvas/image-data';
+import { describe, expect, it } from 'vitest';
 import trimImageData, { RGBA } from '.';
 import { getTestImageData } from '../test/testImageData';
 
-global.ImageData = ImageData;
+// biome-ignore lint/suspicious/noExplicitAny: test override
+(global as any).ImageData = ImageData;
 
 function isSameData(dataA: Uint8ClampedArray | number[], dataB: Uint8ClampedArray | number[]) {
   if (dataA.length !== dataB.length) {
