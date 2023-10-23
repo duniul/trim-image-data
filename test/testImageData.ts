@@ -1,5 +1,3 @@
-/* eslint-disable @typescript-eslint/explicit-module-boundary-types */
-
 import ImageData from '@canvas/image-data';
 import path from 'path';
 import sharp from 'sharp';

@@ -1,0 +1,12 @@
+{
+  "$schema": "./node_modules/@biomejs/biome/configuration_schema.json",
+  "linter": {
+    "enabled": true
+  },
+  "organizeImports": {
+    "enabled": false
+  },
+  "formatter": {
+    "enabled": false
+  }
+}
