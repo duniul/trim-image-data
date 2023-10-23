@@ -20,16 +20,12 @@
     "crop-image",
     "trim-image"
   ],
-  "main": "lib/cjs/index.js",
-  "module": "lib/es/index.js",
   "files": [
-    "lib/**"
+    "dist/**"
   ],
   "scripts": {
-    "build": "rimraf lib && pnpm build:es && pnpm build:cjs",
-    "build:es": "tsc --outDir lib/es --module es6",
-    "build:cjs": "tsc --outDir lib/cjs --module commonjs",
-    "dev": "rimraf lib && pnpm build:es --watch",
+    "build": "tsup",
+    "dev": "tsup --watch",
     "test": "vitest",
     "prepublishOnly": "pnpm build",
     "lint": "biome check",
@@ -43,6 +39,7 @@
   "devDependencies": {
     "@biomejs/biome": "1.3.1",
     "@canvas/image-data": "1.0.0",
+    "@tsconfig/node16": "^16.1.1",
     "@types/sharp": "0.31.1",
     "changesets-changelog-clean": "1.2.1",
     "husky": "8.0.3",
@@ -50,7 +47,24 @@
     "prettier": "3.0.3",
     "prettier-plugin-organize-imports": "3.2.3",
     "sharp": "0.32.6",
+    "tsup": "^7.2.0",
     "typescript": "5.2.2",
     "vitest": "^0.34.6"
-  }
+  },
+  "type": "module",
+  "exports": {
+    ".": {
+      "import": {
+        "types": "./dist/index.d.ts",
+        "default": "./dist/index.js"
+      },
+      "require": {
+        "types": "./dist/index.d.cts",
+        "default": "./dist/index.cjs"
+      }
+    }
+  },
+  "main": "dist/index.cjs",
+  "module": "dist/index.js",
+  "types": "dist/index.d.cts"
 }
