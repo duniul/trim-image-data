@@ -32,7 +32,7 @@
     "dev": "rimraf lib && pnpm build:es --watch",
     "test": "jest",
     "test:watch": "jest --watch",
-    "prepare": "pnpm build",
+    "prepublishOnly": "pnpm build",
     "version": "changeset version",
     "release": "changeset publish"
   },
