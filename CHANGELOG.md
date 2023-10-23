@@ -1,3 +1,16 @@
+# Changelog
+
+## 2.0.1
+
+### Patch Changes
+
+- Bump `crop-image-data` dependency.
+  _[`b5d0879`](https://github.com/duniul/trim-image-data/commit/b5d087938497908e915c22ccf76683c4a63c0058)
+  [@duniul](https://github.com/duniul)_
+- Support both ESM and CJS.
+  _[`d4b4e68`](https://github.com/duniul/trim-image-data/commit/d4b4e688461b25ddc9326dbfe92c06760ae953d5)
+  [@duniul](https://github.com/duniul)_
+
 ## 2.0.0
 
 ### Major Changes
