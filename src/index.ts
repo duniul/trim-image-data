@@ -1,16 +1,35 @@
 import cropImageData, { CropOptions, ImageDataLike } from 'crop-image-data';
 
 type ImageDataLikeData = Uint8ClampedArray | number[];
-
-export type RGBA = [number, number, number, number];
-
-export type TrimColorFunc = (rgba: RGBA) => boolean;
-
 type Side = 'top' | 'right' | 'bottom' | 'left';
 
+/**
+ * RGBA color representation as an array of 4 numbers: red, green, blue, alpha.
+ */
+export type RGBA = [number, number, number, number];
+
+/**
+ * Function that returns `true` if the pixel should be trimmed, `false` otherwise.
+ *
+ * @example
+ * const trimOpaque: TrimColorFunc = ([r, g, b, a]) => a === 255;
+ * const trimWhite: TrimColorFunc = ([r, g, b, a]) => r === 255 && g === 255 && b === 255;
+ * const trimAnyRedChannel: TrimColorFunc = ([r, g, b, a]) => r > 0;
+ */
+export type TrimColorFunc = (rgba: RGBA) => boolean;
+
+/**
+ * Object representing the number of pixels to trim from each side of an image.
+ */
 export type TrimEdges = Required<CropOptions>;
 
+/**
+ * Options to configure the trim operation.
+ */
 export interface TrimOptions {
+  /**
+   * Color to trim from the edges of the image. Can be specified as an RGBA array or a function that returns `true` if the pixel should be trimmed.
+   */
   trimColor: TrimColorFunc | RGBA;
 }
 
@@ -63,6 +82,14 @@ function scanSide(imageData: ImageDataLike, side: Side, trimColor: TrimColorFunc
   return null;
 }
 
+/**
+ * Calculates the number of pixels to trim from each side of an image, provided as an ImageData object.
+ * Does not actually trim the image.
+ *
+ * @param imageData `ImageData` of the image to calculate the trim for
+ * @param trimOptions Options to configure the trim operation
+ * @returns the number of pixels to trim from each side of the image
+ */
 export function getTrimEdges(
   imageData: ImageDataLike,
   trimOptions?: TrimOptions
@@ -86,6 +113,14 @@ export function getTrimEdges(
   return trimEdges as TrimEdges;
 }
 
+/**
+ * Trims pixels from the edges of an image, provided as an ImageData object. Trims transparent pixels by default,
+ * but can be configured to trim any color using the `trimOptions` parameter.
+ *
+ * @param imageData `ImageData` of the image to trim
+ * @param trimOptions Options to configure the trim operation
+ * @returns a new, trimmed `ImageData` object
+ */
 export function trimImageData(imageData: ImageDataLike, trimOptions?: TrimOptions): ImageData {
   const trimEdges = getTrimEdges(imageData, trimOptions);
 
