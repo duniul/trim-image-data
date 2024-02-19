@@ -59,9 +59,33 @@ not mutate the recieved instance.
 
 **Parameters:**
 
-- `imageData` - the ImageData-instance instance to crop
+- `imageData` - the ImageData-instance to crop
 
-- `cropOptions` - optional, an object specifying the amount of pixels to crop from each side
+- `trimOptions` - optional
+
+  - `trimColor([red, green, blue, alpha]) => boolean` | `trimColor: [r, g, b, a]`  
+    Callback function used to determine if a value should be trimmed or not. Receives an object of
+    RGBA channels and should return a boolean.
+
+    Also accepts a single RGBA-array as a shorthand for a callback that returns `true` if all
+    channels are equal to the corresponding channel in the array.
+
+**Return value:**
+
+A new, trimmed ImageData-instance.
+
+### `getTrimEdges(imageData, trimOptions)`
+
+Calculates the number of pixels to trim from each side of an image, provided as an ImageData object.
+Does not actually trim the image.
+
+Uses the same options and defaults as `trimImageData`.
+
+**Parameters:**
+
+- `imageData` - the ImageData-instance to calculate the trim for
+
+- `trimOptions` - optional
 
   - `trimColor([red, green, blue, alpha]) => boolean` | `trimColor: [r, g, b, a]`  
     Callback function used to determine if a value should be trimmed or not. Receives an object of

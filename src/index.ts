@@ -8,6 +8,8 @@ export type TrimColorFunc = (rgba: RGBA) => boolean;
 
 type Side = 'top' | 'right' | 'bottom' | 'left';
 
+export type TrimEdges = Required<CropOptions>;
+
 export interface TrimOptions {
   trimColor: TrimColorFunc | RGBA;
 }
@@ -23,7 +25,9 @@ function getRgba(data: ImageDataLikeData, i: number): RGBA {
 function getTrimColorFunc(option: TrimOptions['trimColor'] | undefined): TrimColorFunc {
   if (typeof option === 'function') {
     return option;
-  } else if (Array.isArray(option)) {
+  }
+
+  if (Array.isArray(option)) {
     return ([r, g, b, a]) => {
       return r === option[0] && g === option[1] && b === option[2] && a === option[3];
     };
@@ -59,13 +63,13 @@ function scanSide(imageData: ImageDataLike, side: Side, trimColor: TrimColorFunc
   return null;
 }
 
-export default function trimImageData(
+export function getTrimEdges(
   imageData: ImageDataLike,
   trimOptions?: TrimOptions
-): ImageData {
+): TrimEdges | null {
   const trimColor: TrimColorFunc = getTrimColorFunc(trimOptions?.trimColor);
 
-  const cropOptions: CropOptions = {};
+  const trimEdges: Partial<TrimEdges> = {};
   const sides: Side[] = ['top', 'bottom', 'left', 'right'];
 
   for (let i = 0; i < sides.length; i++) {
@@ -73,11 +77,23 @@ export default function trimImageData(
     const crop = scanSide(imageData, side, trimColor);
 
     if (crop === null) {
-      return getEmptyImageData();
+      return null;
     }
 
-    cropOptions[side] = crop;
+    trimEdges[side] = crop;
   }
 
-  return cropImageData(imageData, cropOptions);
+  return trimEdges as TrimEdges;
 }
+
+export function trimImageData(imageData: ImageDataLike, trimOptions?: TrimOptions): ImageData {
+  const trimEdges = getTrimEdges(imageData, trimOptions);
+
+  if (trimEdges === null) {
+    return getEmptyImageData();
+  }
+
+  return cropImageData(imageData, trimEdges);
+}
+
+export default trimImageData;
