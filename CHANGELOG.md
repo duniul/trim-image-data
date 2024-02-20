@@ -1,5 +1,17 @@
 # Changelog
 
+## 2.1.0
+
+### Minor Changes
+
+- Add `getTrimEdges()` function, which returns the calculated edges of the trim without cropping the _[`#5`](https://github.com/duniul/trim-image-data/pull/5) [`a159cad2f62fa19609a0e34c8e2bb28d5159c14c`](https://github.com/duniul/trim-image-data/commit/a159cad2f62fa19609a0e34c8e2bb28d5159c14c) [@duniul](https://github.com/duniul)_
+
+  image.
+
+### Patch Changes
+
+- Add typedocs to exported types and functions. _[`#5`](https://github.com/duniul/trim-image-data/pull/5) [`10439df12807acd0d5683b927e725256c45579f3`](https://github.com/duniul/trim-image-data/commit/10439df12807acd0d5683b927e725256c45579f3) [@duniul](https://github.com/duniul)_
+
 ## 2.0.1
 
 ### Patch Changes
